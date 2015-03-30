@@ -86,4 +86,13 @@ public class Application extends Controller {
 		account.deposit(depositAmmount);
 		return ok("Deposit sucess");
 	}
+
+	public static Result transactions() {
+		JsonNode json = request().body().asJson();
+		long AccountNumber = Long.parseLong(json.get("account").asText());
+
+		return ok(Json.toJson(BangkingTransaction.findByAccountNumber(AccountNumber)));
+		
+		
+	}
 }

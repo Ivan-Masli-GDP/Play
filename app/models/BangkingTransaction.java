@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,14 @@ public class BangkingTransaction extends Model {
 
 	private Date transactionDate;
 
+	public static Finder<Long, BangkingTransaction> find = new Finder<>(
+			Long.class, BangkingTransaction.class);
+
+	public static List<BangkingTransaction> findByAccountNumber(Long acc) {
+		return find.select("*").fetch("transactionHistory").where()
+				.eq("transactionHistory.senderAccount", acc).findList();
+	}
+
 	public static class Builder {
 
 		private long amount;
@@ -31,8 +40,7 @@ public class BangkingTransaction extends Model {
 		private Account senderAccount;
 		private Account receiverAccount;
 		private Date transactionDate;
-		
-		
+
 		public Builder amount(long value) {
 			this.amount = value;
 			return this;
