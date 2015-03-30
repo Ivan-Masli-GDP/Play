@@ -70,6 +70,8 @@ public class Application extends Controller {
 		build.amount(transferAmount).transaction_id(transfer_id)
 				.receiverAccount(receiverAccount).senderAccount(senderAccount)
 				.transactionDate(transactionDate).build().save();
+		senderAccount.update();
+		receiverAccount.update();
 		return ok("Transaction success");
 
 	}
@@ -81,18 +83,17 @@ public class Application extends Controller {
 
 		Account account = Account.findByAccountNumber(AccountNumber);
 		if (account == null) {
-			return badRequest("Sender account is not registered");
+			return badRequest("Account is not registered");
 		}
 		account.deposit(depositAmmount);
+		account.update();
 		return ok("Deposit sucess");
 	}
 
-	public static Result transactions() {
-		JsonNode json = request().body().asJson();
-		long AccountNumber = Long.parseLong(json.get("account").asText());
-
-		return ok(Json.toJson(BangkingTransaction.findByAccountNumber(AccountNumber)));
+	public static Result transactions(Long AccountNumber) {
 		
-		
+//		return ok(Json.toJson(BangkingTransaction
+//				.findByAccountNumber(AccountNumber)));
+		return ok(Json.toJson(Account.findByAccountNumber(AccountNumber)));
 	}
 }

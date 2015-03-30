@@ -11,6 +11,11 @@ import javax.persistence.ManyToOne;
 
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Query;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
+
 @Entity
 public class BangkingTransaction extends Model {
 	@Id
@@ -29,8 +34,15 @@ public class BangkingTransaction extends Model {
 			Long.class, BangkingTransaction.class);
 
 	public static List<BangkingTransaction> findByAccountNumber(Long acc) {
-		return find.select("*").fetch("transactionHistory").where()
-				.eq("transactionHistory.senderAccount", acc).findList();
+//		String req = "select id,transaction_id,amount,sender_account_id,receiver_account_id,transaction_date from bangking_transaction where sender_account_id == "+acc;
+//		RawSql rawSql = RawSqlBuilder
+//	            .parse(req)
+//	            .create();
+//		Query<BangkingTransaction> query = Ebean.find(BangkingTransaction.class);
+//		query.setRawSql(rawSql);
+//		return query.findList();
+		return Ebean.find(BangkingTransaction.class).select("transaction_id").where().eq("senderAccount.accountNumber", acc).findList();
+		
 	}
 
 	public static class Builder {

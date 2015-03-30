@@ -6,7 +6,7 @@
 create table account (
   id                        bigint auto_increment not null,
   account_number            bigint,
-  balance                   integer,
+  balance                   bigint,
   constraint uq_account_account_number unique (account_number),
   constraint pk_account primary key (id))
 ;
