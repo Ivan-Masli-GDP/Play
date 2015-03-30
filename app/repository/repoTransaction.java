@@ -2,8 +2,8 @@ package repository;
 
 import java.util.List;
 
-import models.BankingTransaction;
+import models.BangkingTransaction;
 
 public class repoTransaction {
-	private List<BankingTransaction> listOfTransaction;
+	private List<BangkingTransaction> listOfTransaction;
 }
