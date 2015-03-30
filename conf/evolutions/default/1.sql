@@ -13,9 +13,11 @@ create table account (
 
 create table bangking_transaction (
   id                        bigint auto_increment not null,
-  amount                    integer,
+  transaction_id            bigint,
+  amount                    bigint,
   sender_account_id         bigint,
   receiver_account_id       bigint,
+  transaction_date          date,
   constraint pk_bangking_transaction primary key (id))
 ;
 

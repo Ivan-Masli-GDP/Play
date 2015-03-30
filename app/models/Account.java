@@ -18,36 +18,56 @@ public class Account extends Model {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@Column(unique=true)
+	@Column(unique = true)
 	private long accountNumber;
-	private int balance;
-	@OneToMany(targetEntity=BangkingTransaction.class,mappedBy="senderAccount")
+	private long balance;
+	@OneToMany(targetEntity = BangkingTransaction.class, mappedBy = "senderAccount")
 	private List<BangkingTransaction> transactionHistory;
+
 	@JsonProperty("id")
 	public long getId() {
 		return id;
 	}
+
 	@JsonProperty("id")
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public long getAccountNumber() {
 		return accountNumber;
 	}
+
 	public void setAccountNumber(long accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-	public int getBalance() {
+
+	public long getBalance() {
 		return balance;
 	}
-	public void setBalance(int balance) {
-		this.balance = balance;
+
+	public void setBalance(long l) {
+		this.balance = l;
 	}
+
+	public void deposit(long l) {
+		this.setBalance(getBalance() + l);
+	}
+
 	public List<BangkingTransaction> getTransactionHistory() {
 		return transactionHistory;
 	}
-	public void setTransactionHistory(List<BangkingTransaction> transactionHistory) {
+
+	public void setTransactionHistory(
+			List<BangkingTransaction> transactionHistory) {
 		this.transactionHistory = transactionHistory;
+	}
+
+	public static Finder<Long, Account> find = new Finder<>(Long.class,
+			Account.class);
+
+	public static Account findByAccountNumber(Long acc) {
+		return find.where().eq("accountNumber", acc).findUnique();
 	}
 
 }

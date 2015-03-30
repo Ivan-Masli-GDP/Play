@@ -5,5 +5,8 @@
 # Home page
 GET     /                           controllers.Application.index()
 POST	/accounts					controllers.Application.saveAccount()
+POST	/transfer					controllers.Application.transferFunds()
+POST	/accounts/deposit			controllers.Application.depositFund()
+GET		/transactions				controllers.Application.transactions()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
