@@ -36,17 +36,16 @@ public class Application extends Controller {
 
 	public static Result transferFunds() throws ParseException {
 		JsonNode json = request().body().asJson();
-		long senderAccountNumber = Long.parseLong(json.get("from").asText());
-
+		/**
+		 * Retrieving both account
+		 */
 		Account senderAccount = Account
-				.findByAccountNumber(senderAccountNumber);
+				.findByAccountNumber(Long.parseLong(json.get("from").asText()));
 		if (senderAccount == null) {
 			return badRequest("Sender account is not registered");
 		}
-
-		long receiverAccountNumber = Long.parseLong(json.get("to").asText());
 		Account receiverAccount = Account
-				.findByAccountNumber(receiverAccountNumber);
+				.findByAccountNumber(Long.parseLong(json.get("to").asText()));
 		if (receiverAccount == null) {
 			return badRequest("Receiver account is not registered");
 		}
@@ -56,7 +55,9 @@ public class Application extends Controller {
 		if (senderAccount.getBalance() < transferAmount) {
 			return badRequest("Insufficient fund");
 		}
-
+		/**
+		 * Updating the accounts' balance
+		 */
 		senderAccount.setBalance(senderAccount.getBalance() - transferAmount);
 		receiverAccount.setBalance(receiverAccount.getBalance()
 				+ transferAmount);
@@ -66,6 +67,10 @@ public class Application extends Controller {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddhh:mm:ss");
 		Date transactionDate = new Date(format.parse(json.get("date").asText())
 				.getTime());
+		
+		/**
+		 * Building the transaction object
+		 */
 		Builder build = new BangkingTransaction.Builder();
 		build.amount(transferAmount).transaction_id(transfer_id)
 				.receiverAccount(receiverAccount).senderAccount(senderAccount)
@@ -92,8 +97,8 @@ public class Application extends Controller {
 
 	public static Result transactions(Long AccountNumber) {
 		
-//		return ok(Json.toJson(BangkingTransaction
-//				.findByAccountNumber(AccountNumber)));
-		return ok(Json.toJson(Account.findByAccountNumber(AccountNumber)));
+		return ok(Json.toJson(BangkingTransaction
+				.findByAccountNumber(AccountNumber)));
+		//return ok(Json.toJson(Account.findByAccountNumber(AccountNumber)));
 	}
 }
